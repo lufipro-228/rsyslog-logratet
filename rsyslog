@@ -1,2 +1,6 @@
 #hq
 nano /etc/rsyslog.conf
+-------
+module(load="imudp") # needs to be done just once
+input(type="imudp" port="514")
+------
