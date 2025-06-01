@@ -8,3 +8,34 @@ if $fromhost-ip contains '192.168.150.1' then /opt/br-srv/log.log
 if $fromhost-ip contains '192.168.150.30' then /opt/br-rtr/log.log
 if $fromhost-ip contains '10.10.100.62' then /opt/hq-rtr/log.log
 ------
+systemctl restart rsyslog.ser
+--
+nano /etc/logrotate.d/rsyslog
+------
+/opt/hq-rtr/log.log /opt/br-rtr/log.log /opt/br-srv/log.log {
+        weekly
+	compress
+        minsize 10M
+}
+------
+systemctl restart logrotate (timer)
+----
+#br-srv
+nano /etc/rsyslog.conf
+----
+# local.7
+*.warn @hq-srv:514
+---
+systemctl restart rsyslog
+----
+
+eco  
+---
+rsyslog host 192.168.100.1 sources 192.168.150.30 port 514
+rsyslog host 192.168.100.1 port 514
+
+check
+logger -p user.warn "im going to be the pirate king"
+tail log.log
+----
+robin tyannn))
